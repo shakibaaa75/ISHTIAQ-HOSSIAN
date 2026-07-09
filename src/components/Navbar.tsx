@@ -11,8 +11,8 @@ const leftNavLinks = [
 
 const rightNavLinks = [
   { label: "Qualification", href: "/qualification" },
+  { label: "Documentary", href: "/documentary" },
   { label: "Projects", href: "#projects" },
-  { label: "Documentary", href: "#documentary" },
 ];
 
 const skillsDropdown = [
@@ -30,15 +30,13 @@ export default function Navbar() {
 
   const isActive = (path: string) => location.pathname === path;
 
-  // Mobile nav mirrors the desktop nav exactly, including the Skills
-  // sub-menu, instead of a flat list with a dead-end "Skills" link.
   const mobileNavLinks = [
     { label: "Home", href: "/" },
     { label: "Resume", href: "/resume" },
     { label: "Skills", children: skillsDropdown },
     { label: "Qualification", href: "/qualification" },
+    { label: "Documentary", href: "/documentary" },
     { label: "Projects", href: "#projects" },
-    { label: "Documentary", href: "#documentary" },
   ];
 
   const closeMobileMenu = () => {
@@ -118,13 +116,17 @@ export default function Navbar() {
             </div>
 
             {rightNavLinks.map((link) => (
-              <a
+              <Link
                 key={link.label}
-                href={link.href}
-                className="text-sm font-medium tracking-wide text-[#1A1A1A] dark:text-[#E5E5E5] hover:text-[#555] dark:hover:text-white transition-colors duration-300"
+                to={link.href}
+                className={`text-sm font-medium tracking-wide transition-colors duration-300 ${
+                  isActive(link.href)
+                    ? "text-[#1A1A1A] dark:text-white"
+                    : "text-[#1A1A1A]/70 dark:text-[#E5E5E5]/70 hover:text-[#555] dark:hover:text-white"
+                }`}
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </div>
 
