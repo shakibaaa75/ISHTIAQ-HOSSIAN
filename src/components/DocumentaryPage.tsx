@@ -4,117 +4,117 @@ import {
   FileText,
   Download,
   Eye,
-  ZoomIn,
-  ZoomOut,
-  RotateCw,
+  //   ZoomIn,
+  //   ZoomOut,
+  //   RotateCw,
   BookOpen,
   Layers,
   GraduationCap,
 } from "lucide-react";
 
 // ─── PDF VIEWER COMPONENT (reused from ResumePage) ───
-function PDFViewer({ url, title }: { url: string; title: string }) {
-  const [scale, setScale] = useState(1.0);
-  const [rotate, setRotate] = useState(0);
-  const [loading, setLoading] = useState(true);
+// function PDFViewer({ url, title }: { url: string; title: string }) {
+//   const [scale, setScale] = useState(1.0);
+//   const [rotate, setRotate] = useState(0);
+//   const [loading, setLoading] = useState(true);
 
-  return (
-    <div className="relative w-full">
-      {/* Toolbar */}
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="flex items-center justify-between gap-2 px-2.5 sm:px-4 py-2.5 sm:py-3 bg-white/80 dark:bg-[#2A2A2A]/80 backdrop-blur-sm border border-[#E5E5E5] dark:border-[#333] rounded-t-2xl"
-      >
-        <div className="hidden sm:flex items-center gap-2 min-w-0">
-          <FileText
-            size={16}
-            className="text-[#888] dark:text-[#666] shrink-0"
-          />
-          <span className="text-xs font-medium text-[#555] dark:text-[#999] truncate max-w-[110px] sm:max-w-xs">
-            {title}
-          </span>
-        </div>
-        <div className="flex items-center gap-0.5 sm:gap-1.5 ml-auto">
-          <button
-            onClick={() => setScale((s) => Math.max(0.5, s - 0.1))}
-            className="p-1.5 rounded-lg hover:bg-[#F5F2ED] dark:hover:bg-[#333] transition-colors"
-            title="Zoom out"
-          >
-            <ZoomOut size={14} className="text-[#555] dark:text-[#999]" />
-          </button>
-          <span className="text-[10px] sm:text-xs font-mono text-[#888] dark:text-[#666] w-9 sm:w-12 text-center">
-            {Math.round(scale * 100)}%
-          </span>
-          <button
-            onClick={() => setScale((s) => Math.min(2.0, s + 0.1))}
-            className="p-1.5 rounded-lg hover:bg-[#F5F2ED] dark:hover:bg-[#333] transition-colors"
-            title="Zoom in"
-          >
-            <ZoomIn size={14} className="text-[#555] dark:text-[#999]" />
-          </button>
-          <div className="w-px h-4 bg-[#E5E5E5] dark:bg-[#333] mx-0.5 sm:mx-1" />
-          <button
-            onClick={() => setRotate((r) => (r + 90) % 360)}
-            className="p-1.5 rounded-lg hover:bg-[#F5F2ED] dark:hover:bg-[#333] transition-colors"
-            title="Rotate"
-          >
-            <RotateCw size={14} className="text-[#555] dark:text-[#999]" />
-          </button>
-          <a
-            href={url}
-            download={title}
-            className="p-1.5 rounded-lg hover:bg-[#F5F2ED] dark:hover:bg-[#333] transition-colors"
-            title="Download"
-          >
-            <Download size={14} className="text-[#555] dark:text-[#999]" />
-          </a>
-          <a
-            href={url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex p-1.5 rounded-lg hover:bg-[#F5F2ED] dark:hover:bg-[#333] transition-colors"
-            title="Preview"
-          >
-            <Eye size={14} className="text-[#555] dark:text-[#999]" />
-          </a>
-        </div>
-      </motion.div>
+//   return (
+//     <div className="relative w-full">
+//       {/* Toolbar */}
+//       <motion.div
+//         initial={{ opacity: 0, y: -10 }}
+//         animate={{ opacity: 1, y: 0 }}
+//         transition={{ delay: 0.3 }}
+//         className="flex items-center justify-between gap-2 px-2.5 sm:px-4 py-2.5 sm:py-3 bg-white/80 dark:bg-[#2A2A2A]/80 backdrop-blur-sm border border-[#E5E5E5] dark:border-[#333] rounded-t-2xl"
+//       >
+//         <div className="hidden sm:flex items-center gap-2 min-w-0">
+//           <FileText
+//             size={16}
+//             className="text-[#888] dark:text-[#666] shrink-0"
+//           />
+//           <span className="text-xs font-medium text-[#555] dark:text-[#999] truncate max-w-[110px] sm:max-w-xs">
+//             {title}
+//           </span>
+//         </div>
+//         <div className="flex items-center gap-0.5 sm:gap-1.5 ml-auto">
+//           <button
+//             onClick={() => setScale((s) => Math.max(0.5, s - 0.1))}
+//             className="p-1.5 rounded-lg hover:bg-[#F5F2ED] dark:hover:bg-[#333] transition-colors"
+//             title="Zoom out"
+//           >
+//             <ZoomOut size={14} className="text-[#555] dark:text-[#999]" />
+//           </button>
+//           <span className="text-[10px] sm:text-xs font-mono text-[#888] dark:text-[#666] w-9 sm:w-12 text-center">
+//             {Math.round(scale * 100)}%
+//           </span>
+//           <button
+//             onClick={() => setScale((s) => Math.min(2.0, s + 0.1))}
+//             className="p-1.5 rounded-lg hover:bg-[#F5F2ED] dark:hover:bg-[#333] transition-colors"
+//             title="Zoom in"
+//           >
+//             <ZoomIn size={14} className="text-[#555] dark:text-[#999]" />
+//           </button>
+//           <div className="w-px h-4 bg-[#E5E5E5] dark:bg-[#333] mx-0.5 sm:mx-1" />
+//           <button
+//             onClick={() => setRotate((r) => (r + 90) % 360)}
+//             className="p-1.5 rounded-lg hover:bg-[#F5F2ED] dark:hover:bg-[#333] transition-colors"
+//             title="Rotate"
+//           >
+//             <RotateCw size={14} className="text-[#555] dark:text-[#999]" />
+//           </button>
+//           <a
+//             href={url}
+//             download={title}
+//             className="p-1.5 rounded-lg hover:bg-[#F5F2ED] dark:hover:bg-[#333] transition-colors"
+//             title="Download"
+//           >
+//             <Download size={14} className="text-[#555] dark:text-[#999]" />
+//           </a>
+//           <a
+//             href={url}
+//             target="_blank"
+//             rel="noopener noreferrer"
+//             className="inline-flex p-1.5 rounded-lg hover:bg-[#F5F2ED] dark:hover:bg-[#333] transition-colors"
+//             title="Preview"
+//           >
+//             <Eye size={14} className="text-[#555] dark:text-[#999]" />
+//           </a>
+//         </div>
+//       </motion.div>
 
-      {/* PDF Canvas Area */}
-      <div className="relative bg-[#E5E5E5] dark:bg-[#111] rounded-b-2xl overflow-hidden border-x border-b border-[#E5E5E5] dark:border-[#333]">
-        {loading && (
-          <div className="absolute inset-0 flex items-center justify-center z-10 bg-[#E5E5E5] dark:bg-[#111]">
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-              className="w-8 h-8 border-2 border-[#1A1A1A] dark:border-white border-t-transparent rounded-full"
-            />
-          </div>
-        )}
-        <div
-          className="relative w-full overflow-hidden h-[50vh] sm:h-[65vh] lg:h-[75vh]"
-          style={{ maxHeight: "1000px" }}
-        >
-          <iframe
-            src={`${url}#toolbar=0&navpanes=0`}
-            className="absolute inset-0 w-full h-full shadow-2xl"
-            style={{
-              border: "none",
-              background: "white",
-              transform: `rotate(${rotate}deg) scale(${scale})`,
-              transformOrigin: "center center",
-              transition: "transform 0.2s ease",
-            }}
-            onLoad={() => setLoading(false)}
-            title={title}
-          />
-        </div>
-      </div>
-    </div>
-  );
-}
+//       {/* PDF Canvas Area */}
+//       <div className="relative bg-[#E5E5E5] dark:bg-[#111] rounded-b-2xl overflow-hidden border-x border-b border-[#E5E5E5] dark:border-[#333]">
+//         {loading && (
+//           <div className="absolute inset-0 flex items-center justify-center z-10 bg-[#E5E5E5] dark:bg-[#111]">
+//             <motion.div
+//               animate={{ rotate: 360 }}
+//               transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+//               className="w-8 h-8 border-2 border-[#1A1A1A] dark:border-white border-t-transparent rounded-full"
+//             />
+//           </div>
+//         )}
+//         <div
+//           className="relative w-full overflow-hidden h-[50vh] sm:h-[65vh] lg:h-[75vh]"
+//           style={{ maxHeight: "1000px" }}
+//         >
+//           <iframe
+//             src={`${url}#toolbar=0&navpanes=0`}
+//             className="absolute inset-0 w-full h-full shadow-2xl"
+//             style={{
+//               border: "none",
+//               background: "white",
+//               transform: `rotate(${rotate}deg) scale(${scale})`,
+//               transformOrigin: "center center",
+//               transition: "transform 0.2s ease",
+//             }}
+//             onLoad={() => setLoading(false)}
+//             title={title}
+//           />
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
 
 // ─── PDF CARD (compact grid view) ───
 function PDFCard({
@@ -194,7 +194,7 @@ function PDFCard({
 
 // ─── SECTION HEADER ───
 function SectionHeader({
-  icon: Icon,
+  //   icon: Icon,
   label,
   title,
   delay = 0,
