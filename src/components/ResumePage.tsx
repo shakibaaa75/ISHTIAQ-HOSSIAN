@@ -8,14 +8,9 @@ import {
   ZoomOut,
   RotateCw,
 } from "lucide-react";
-import { useTheme } from "../context/ThemeContext";
-import { PDFViewer as EmbedPDFViewer } from "@embedpdf/react-pdf-viewer";
-
 // ─── PDF VIEWER COMPONENT ───
-// Using @embedpdf/react-pdf-viewer for a full-featured PDF viewer.
 
 function PDFViewer({ url }: { url: string }) {
-  const { theme } = useTheme();
   const [scale, setScale] = useState(1.0);
   const [rotate, setRotate] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -92,43 +87,33 @@ function PDFViewer({ url }: { url: string }) {
             />
           </div>
         )}
+        {/*
+          Fix: previously this wrapper had `overflow-auto` AND the iframe's
+          native browser PDF viewer scrolled internally too — that produced
+          two visible scrollbars (one for the page, one inside the PDF).
+          Now the wrapper is a fixed-height, `overflow-hidden` box, and the
+          iframe fills it completely (h-full). The only scrollbar left is
+          the PDF viewer's own internal one. Zoom/rotate are applied via a
+          CSS transform on the iframe itself so they no longer need to
+          resize/scroll the outer wrapper at all.
+        */}
         <div
-          className="w-full flex justify-center py-4 sm:py-6 px-2 overflow-auto"
-          style={{ maxHeight: "85vh" }}
+          className="relative w-full overflow-hidden"
+          style={{ height: "min(85vh, 1000px)" }}
         >
-          {/*
-            Fix: the old version used a fixed 1100px iframe height plus a
-            percentage width, which either overflowed or shrank oddly on
-            phones/tablets. Now the page itself is a fluid, aspect-ratio box
-            (US Letter ≈ 1 : 1.294) that scales with the container's width on
-            any screen, and zoom/rotate are applied to that box via transform
-            instead of resizing the iframe directly.
-          */}
-          <div
-            className="w-full max-w-[850px] mx-auto"
+          <iframe
+            src={`${url}#toolbar=0&navpanes=0`}
+            className="absolute inset-0 w-full h-full shadow-2xl"
             style={{
+              border: "none",
+              background: "white",
               transform: `rotate(${rotate}deg) scale(${scale})`,
-              transformOrigin: "top center",
+              transformOrigin: "center center",
               transition: "transform 0.2s ease",
             }}
-          >
-            <div
-              className="relative w-full"
-              style={{ aspectRatio: "1 / 1.294" }}
-            >
-              <iframe
-                src={`${url}#toolbar=0&navpanes=0`}
-                className="absolute inset-0 w-full h-full shadow-2xl"
-                style={{
-                  border: "none",
-                  borderRadius: "4px",
-                  background: "white",
-                }}
-                onLoad={() => setLoading(false)}
-                title="Resume PDF"
-              />
-            </div>
-          </div>
+            onLoad={() => setLoading(false)}
+            title="Resume PDF"
+          />
         </div>
       </div>
     </div>
