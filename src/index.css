@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer utilities {
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* tech-animations.css
+   -------------------------------------------------------------------------
+   Drop-in replacement engine for all the "repeat: Infinity" Framer Motion
+   loops used in TechBackground.tsx, HeroImageCard.tsx and HeroSection.tsx.
+
+   WHY: Framer Motion drives every one of those loops with JavaScript on the
+   main thread (a React state update every animation frame, for EVERY
+   animated element — and there were 100+ of them running at once: 68 blinking
+   binary digits, spinning motor coils, rotating gears, etc). That is what
+   was heating up the device. Plain CSS @keyframes are handled natively by
+   the browser/GPU compositor, cost close to nothing even with many elements,
+   and — important bonus — they automatically stop running when an element
+   is hidden by a `hidden md:block` Tailwind class. The old version kept
+   animating those off-screen elements in the background even when you
+   couldn't see them.
+
+   Visuals are the same or extremely close; only the animation *mechanism*
+   changed, not the design. Import this file once, globally (e.g. in your
+   main.tsx / index.css via `@import "./tech-animations.css";`).
+   ------------------------------------------------------------------------- */
+
+@keyframes ta-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes ta-pulse {
+  0%, 100% { opacity: var(--ta-op-a, 0.2); }
+  50%      { opacity: var(--ta-op-b, 0.8); }
+}
+
+@keyframes ta-flicker {
+  0%, 100% { opacity: 0; }
+  40%, 60% { opacity: var(--ta-op-b, 0.6); }
+}
+
+@keyframes ta-ring {
+  0%, 100% { r: var(--ta-r-a, 8); opacity: var(--ta-op-a, 0.5); }
+  50%      { r: var(--ta-r-b, 28); opacity: 0; }
+}
+
+@keyframes ta-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-6px) rotate(5deg); }
+}
+
+@keyframes ta-sway {
+  0%, 100% { transform: rotate(0deg); }
+  25%      { transform: rotate(15deg); }
+  75%      { transform: rotate(-15deg); }
+}
+
+@keyframes ta-needle {
+  0%, 100% { transform: rotate(-30deg); }
+  50%      { transform: rotate(30deg); }
+}
+
+@keyframes ta-scan {
+  0%, 100% { top: 10%; opacity: 0; }
+  50%      { top: 90%; opacity: 0.6; }
+}
+
+@keyframes ta-bar {
+  0%, 100% { transform: scaleY(0.6); opacity: 0.2; }
+  50%      { transform: scaleY(1.3); opacity: 0.8; }
+}
+
+@keyframes ta-rise {
+  0%   { transform: translate(0, 0); opacity: 0; }
+  30%  { opacity: 0.5; }
+  100% { transform: translate(var(--ta-dx, 10px), var(--ta-dy, -40px)); opacity: 0; }
+}
+
+/* Traveling signal dot in the Logic Gate diagram — matches the original
+   multi-waypoint path exactly, just driven by CSS instead of JS. */
+@keyframes ta-logic-signal {
+  0%   { cx: 0;   cy: 50; opacity: 0; }
+  12%  { cx: 60;  cy: 50; opacity: 1; }
+  22%  { cx: 80;  cy: 50; opacity: 1; }
+  33%  { cx: 100; cy: 65; opacity: 1; }
+  55%  { cx: 140; cy: 65; opacity: 1; }
+  63%  { cx: 155; cy: 80; opacity: 1; }
+  77%  { cx: 200; cy: 80; opacity: 1; }
+  88%  { cx: 220; cy: 80; opacity: 1; }
+  100% { cx: 280; cy: 80; opacity: 0; }
+}
+
+.ta-spin    { animation-name: ta-spin;    animation-timing-function: linear;       animation-iteration-count: infinite; }
+.ta-pulse   { animation-name: ta-pulse;   animation-timing-function: ease-in-out;  animation-iteration-count: infinite; }
+.ta-flicker { animation-name: ta-flicker; animation-timing-function: ease-in-out;  animation-iteration-count: infinite; }
+.ta-ring    { animation-name: ta-ring;    animation-timing-function: ease-in-out;  animation-iteration-count: infinite; }
+.ta-float   { animation-name: ta-float;   animation-timing-function: ease-in-out;  animation-iteration-count: infinite; }
+.ta-sway    { animation-name: ta-sway;    animation-timing-function: ease-in-out;  animation-iteration-count: infinite; }
+.ta-needle  { animation-name: ta-needle;  animation-timing-function: ease-in-out;  animation-iteration-count: infinite; }
+.ta-scan    { animation-name: ta-scan;    animation-timing-function: linear;       animation-iteration-count: infinite; }
+.ta-bar     { animation-name: ta-bar;     animation-timing-function: ease-in-out;  animation-iteration-count: infinite; transform-box: fill-box; transform-origin: bottom; }
+.ta-rise    { animation-name: ta-rise;    animation-timing-function: ease-out;     animation-iteration-count: infinite; transform-box: fill-box; }
+.ta-logic-signal { animation-name: ta-logic-signal; animation-timing-function: linear; animation-iteration-count: infinite; }
+
+/* Respect the OS-level "reduce motion" accessibility setting too. */
+@media (prefers-reduced-motion: reduce) {
+  .ta-spin, .ta-pulse, .ta-flicker, .ta-ring, .ta-float,
+  .ta-sway, .ta-needle, .ta-scan, .ta-bar, .ta-rise, .ta-logic-signal {
+    animation: none !important;
+  }
+}
