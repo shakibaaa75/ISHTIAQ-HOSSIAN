@@ -3,7 +3,7 @@ import { useState } from "react";
 import {
   FileText,
   Download,
-  ExternalLink,
+  Eye,
   ZoomIn,
   ZoomOut,
   RotateCw,
@@ -67,14 +67,15 @@ function PDFViewer({ url }: { url: string }) {
           >
             <Download size={14} className="text-[#555] dark:text-[#999]" />
           </a>
+          {/* Preview button — visible on all screen sizes */}
           <a
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:inline-flex p-1.5 rounded-lg hover:bg-[#F5F2ED] dark:hover:bg-[#333] transition-colors"
-            title="Open in new tab"
+            className="inline-flex p-1.5 rounded-lg hover:bg-[#F5F2ED] dark:hover:bg-[#333] transition-colors"
+            title="Preview"
           >
-            <ExternalLink size={14} className="text-[#555] dark:text-[#999]" />
+            <Eye size={14} className="text-[#555] dark:text-[#999]" />
           </a>
         </div>
       </motion.div>
@@ -90,16 +91,6 @@ function PDFViewer({ url }: { url: string }) {
             />
           </div>
         )}
-        {/*
-          Fix: previously this wrapper had `overflow-auto` AND the iframe's
-          native browser PDF viewer scrolled internally too — that produced
-          two visible scrollbars (one for the page, one inside the PDF).
-          Now the wrapper is a fixed-height, `overflow-hidden` box, and the
-          iframe fills it completely (h-full). The only scrollbar left is
-          the PDF viewer's own internal one. Zoom/rotate are applied via a
-          CSS transform on the iframe itself so they no longer need to
-          resize/scroll the outer wrapper at all.
-        */}
         <div
           className="relative w-full overflow-hidden h-[50vh] sm:h-[65vh] lg:h-[75vh]"
           style={{ maxHeight: "1000px" }}
@@ -186,7 +177,6 @@ function ResumeInfoCard() {
         ))}
       </div>
 
-      {/* Circuit accent */}
       <svg
         viewBox="0 0 200 20"
         className="w-full mt-6 text-[#1A1A1A] dark:text-white opacity-10"
@@ -251,7 +241,6 @@ export default function ResumePage() {
 
   return (
     <section className="relative max-w-7xl mx-auto px-4 sm:px-6 md:px-12 pt-6 pb-20 overflow-x-hidden">
-      {/* Background accents matching HeroSection style */}
       <svg
         viewBox="0 0 120 200"
         className="absolute top-4 left-2 sm:top-8 sm:left-4 w-[40px] sm:w-[60px] md:w-[80px] opacity-[0.06] dark:opacity-[0.10] text-[#1A1A1A] dark:text-white pointer-events-none"
@@ -293,7 +282,6 @@ export default function ResumePage() {
         <circle cx="40" cy="40" r="3" fill="currentColor" />
       </motion.svg>
 
-      {/* Page Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -328,7 +316,6 @@ export default function ResumePage() {
         </motion.svg>
       </motion.div>
 
-      {/* Bio text */}
       <motion.p
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
@@ -344,19 +331,15 @@ export default function ResumePage() {
         meaningfully to the engineering and technology industry.
       </motion.p>
 
-      {/* Main Grid: PDF + Sidebar */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8">
-        {/* PDF Viewer - takes 2 columns */}
         <div className="lg:col-span-2">
           <PDFViewer url={pdfUrl} />
         </div>
 
-        {/* Sidebar */}
         <div className="space-y-6">
           <ResumeInfoCard />
           <SkillsPreview />
 
-          {/* Download CTA */}
           <motion.a
             href={pdfUrl}
             download="Arnob_Resume.pdf"
