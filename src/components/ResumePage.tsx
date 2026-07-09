@@ -22,15 +22,18 @@ function PDFViewer({ url }: { url: string }) {
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="flex items-center justify-between px-4 py-3 bg-white/80 dark:bg-[#2A2A2A]/80 backdrop-blur-sm border border-[#E5E5E5] dark:border-[#333] rounded-t-2xl"
+        className="flex items-center justify-between gap-2 px-2.5 sm:px-4 py-2.5 sm:py-3 bg-white/80 dark:bg-[#2A2A2A]/80 backdrop-blur-sm border border-[#E5E5E5] dark:border-[#333] rounded-t-2xl"
       >
-        <div className="flex items-center gap-2">
-          <FileText size={16} className="text-[#888] dark:text-[#666]" />
-          <span className="text-xs font-medium text-[#555] dark:text-[#999] truncate max-w-[200px] sm:max-w-xs">
+        <div className="hidden sm:flex items-center gap-2 min-w-0">
+          <FileText
+            size={16}
+            className="text-[#888] dark:text-[#666] shrink-0"
+          />
+          <span className="text-xs font-medium text-[#555] dark:text-[#999] truncate max-w-[110px] sm:max-w-xs">
             Arnob&apos;s Resume.pdf
           </span>
         </div>
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-0.5 sm:gap-1.5 ml-auto">
           <button
             onClick={() => setScale((s) => Math.max(0.5, s - 0.1))}
             className="p-1.5 rounded-lg hover:bg-[#F5F2ED] dark:hover:bg-[#333] transition-colors"
@@ -38,7 +41,7 @@ function PDFViewer({ url }: { url: string }) {
           >
             <ZoomOut size={14} className="text-[#555] dark:text-[#999]" />
           </button>
-          <span className="text-xs font-mono text-[#888] dark:text-[#666] w-12 text-center">
+          <span className="text-[10px] sm:text-xs font-mono text-[#888] dark:text-[#666] w-9 sm:w-12 text-center">
             {Math.round(scale * 100)}%
           </span>
           <button
@@ -48,7 +51,7 @@ function PDFViewer({ url }: { url: string }) {
           >
             <ZoomIn size={14} className="text-[#555] dark:text-[#999]" />
           </button>
-          <div className="w-px h-4 bg-[#E5E5E5] dark:bg-[#333] mx-1" />
+          <div className="w-px h-4 bg-[#E5E5E5] dark:bg-[#333] mx-0.5 sm:mx-1" />
           <button
             onClick={() => setRotate((r) => (r + 90) % 360)}
             className="p-1.5 rounded-lg hover:bg-[#F5F2ED] dark:hover:bg-[#333] transition-colors"
@@ -68,7 +71,7 @@ function PDFViewer({ url }: { url: string }) {
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-1.5 rounded-lg hover:bg-[#F5F2ED] dark:hover:bg-[#333] transition-colors"
+            className="hidden sm:inline-flex p-1.5 rounded-lg hover:bg-[#F5F2ED] dark:hover:bg-[#333] transition-colors"
             title="Open in new tab"
           >
             <ExternalLink size={14} className="text-[#555] dark:text-[#999]" />
@@ -98,8 +101,8 @@ function PDFViewer({ url }: { url: string }) {
           resize/scroll the outer wrapper at all.
         */}
         <div
-          className="relative w-full overflow-hidden"
-          style={{ height: "min(85vh, 1000px)" }}
+          className="relative w-full overflow-hidden h-[50vh] sm:h-[65vh] lg:h-[75vh]"
+          style={{ maxHeight: "1000px" }}
         >
           <iframe
             src={`${url}#toolbar=0&navpanes=0`}
@@ -154,10 +157,10 @@ function ResumeInfoCard() {
       initial={{ opacity: 0, x: -30 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.6, delay: 0.2 }}
-      className="bg-white dark:bg-[#2A2A2A] rounded-2xl border border-[#E5E5E5] dark:border-[#333] p-6 shadow-sm"
+      className="bg-white dark:bg-[#2A2A2A] rounded-2xl border border-[#E5E5E5] dark:border-[#333] p-5 sm:p-6 shadow-sm"
     >
       <div className="flex items-center gap-2 mb-5">
-        <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] dark:bg-white flex items-center justify-center">
+        <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] dark:bg-white flex items-center justify-center shrink-0">
           <FileText size={16} className="text-white dark:text-[#1A1A1A]" />
         </div>
         <h3 className="text-sm font-bold tracking-wide uppercase text-[#1A1A1A] dark:text-white">
@@ -176,7 +179,7 @@ function ResumeInfoCard() {
             <p className="text-[10px] font-semibold uppercase tracking-wider text-[#888] dark:text-[#666] mb-0.5">
               {item.label}
             </p>
-            <p className="text-sm font-medium text-[#1A1A1A] dark:text-[#E5E5E5]">
+            <p className="text-sm font-medium text-[#1A1A1A] dark:text-[#E5E5E5] break-words">
               {item.value}
             </p>
           </motion.div>
@@ -220,7 +223,7 @@ function SkillsPreview() {
       initial={{ opacity: 0, x: -30 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.6, delay: 0.4 }}
-      className="bg-white dark:bg-[#2A2A2A] rounded-2xl border border-[#E5E5E5] dark:border-[#333] p-6 shadow-sm"
+      className="bg-white dark:bg-[#2A2A2A] rounded-2xl border border-[#E5E5E5] dark:border-[#333] p-5 sm:p-6 shadow-sm"
     >
       <h3 className="text-sm font-bold tracking-wide uppercase text-[#1A1A1A] dark:text-white mb-4">
         Key Skills
@@ -247,7 +250,7 @@ export default function ResumePage() {
   const pdfUrl = "/image/Arnob's Resume.pdf";
 
   return (
-    <section className="relative max-w-7xl mx-auto px-6 md:px-12 pt-6 pb-20">
+    <section className="relative max-w-7xl mx-auto px-4 sm:px-6 md:px-12 pt-6 pb-20 overflow-x-hidden">
       {/* Background accents matching HeroSection style */}
       <svg
         viewBox="0 0 120 200"
@@ -303,7 +306,7 @@ export default function ResumePage() {
             Portfolio / Resume
           </p>
         </div>
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter text-[#1A1A1A] dark:text-white leading-[0.95]">
+        <h1 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tighter text-[#1A1A1A] dark:text-white leading-[0.95]">
           My Resume
         </h1>
         <motion.svg
@@ -342,7 +345,7 @@ export default function ResumePage() {
       </motion.p>
 
       {/* Main Grid: PDF + Sidebar */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8">
         {/* PDF Viewer - takes 2 columns */}
         <div className="lg:col-span-2">
           <PDFViewer url={pdfUrl} />

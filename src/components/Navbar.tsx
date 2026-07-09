@@ -36,7 +36,7 @@ export default function Navbar() {
     { label: "Home", href: "/" },
     { label: "Resume", href: "/resume" },
     { label: "Skills", children: skillsDropdown },
-    { label: "Qualification", href: "#qualification" },
+    { label: "Qualification", href: "/qualification" },
     { label: "Projects", href: "#projects" },
     { label: "Documentary", href: "#documentary" },
   ];
