@@ -11,7 +11,7 @@ const skillsData = [
       "Designing and developing embedded electronic systems using Arduino and microcontrollers by integrating various sensors, relay modules, and control components to build smart automation, monitoring, and energy management solutions. These projects involve circuit design, programming, and testing to ensure efficient system performance.",
     icon: Cpu,
     tag: "Embedded Systems",
-    image: "/image/skills/arduino-microcontroller.jpg",
+    image: "/image/WhatsApp Image 2026-07-12 at 04.50.08.jpeg",
   },
   {
     id: "circuit",
@@ -20,7 +20,7 @@ const skillsData = [
       "Creating, analyzing, and testing electronic circuits using simulation software such as NI Multisim or Proteus. Designing circuits virtually to verify functionality, identify potential issues, optimize performance, and ensure reliability before building physical prototypes. Covers analog and digital circuits, microcontroller interfacing, and power management systems.",
     icon: CircuitBoard,
     tag: "NI Multisim / Proteus",
-    image: "/image/skills/circuit-design.jpg",
+    image: "/image/WhatsApp Image 2026-07-12 at 04.50.24.jpeg",
   },
   {
     id: "matlab",
@@ -29,7 +29,7 @@ const skillsData = [
       "Performing numerical analysis, mathematical modeling, and simulation of engineering systems. Used to analyze data, design and test electrical circuits, simulate control systems, and visualize results to optimize performance. Enables accurate predictions, problem-solving, and validation of engineering designs before real-world implementation.",
     icon: BarChart3,
     tag: "Simulation & Modeling",
-    image: "/image/skills/matlab-engineering.jpg",
+    image: "/image/WhatsApp Image 2026-07-12 at 04.50.25 (1).jpeg",
   },
   {
     id: "autocad",
@@ -38,7 +38,7 @@ const skillsData = [
       "A computer-aided design (CAD) software developed by Autodesk, widely used by engineers, architects, and designers to create accurate 2D drawings and 3D models. AutoCAD improves design precision, increases productivity, and simplifies the drafting process for engineering and architectural projects.",
     icon: DraftingCompass,
     tag: "2D / 3D CAD",
-    image: "/image/skills/autocad-design.jpg",
+    image: "/image/WhatsApp Image 2026-07-12 at 04.50.25.jpeg",
   },
 ];
 

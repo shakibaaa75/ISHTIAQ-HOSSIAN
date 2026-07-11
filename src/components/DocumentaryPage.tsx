@@ -192,7 +192,7 @@ function PDFCard({
 
 // ─── SECTION HEADER ───
 function SectionHeader({
-  icon: Icon,
+  // icon: Icon,
   label,
   title,
   delay = 0,
