@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Moon, Sun, X, Menu, ChevronDown } from "lucide-react";
+import { Moon, Sun, X, Menu } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
 import { Link, useLocation } from "react-router-dom";
 
 const leftNavLinks = [
   { label: "Home", href: "/" },
   { label: "Resume", href: "/resume" },
+  { label: "Skills", href: "/skills" },
 ];
 
 const rightNavLinks = [
@@ -15,25 +16,17 @@ const rightNavLinks = [
   { label: "Projects", href: "#projects" },
 ];
 
-const skillsDropdown = [
-  { label: "Technical", href: "#technical" },
-  { label: "Creative", href: "#creative" },
-  { label: "Soft Skills", href: "#soft-skills" },
-];
-
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [skillsOpen, setSkillsOpen] = useState(false);
-  const [mobileSkillsOpen, setMobileSkillsOpen] = useState(false);
 
   const isActive = (path: string) => location.pathname === path;
 
   const mobileNavLinks = [
     { label: "Home", href: "/" },
     { label: "Resume", href: "/resume" },
-    { label: "Skills", children: skillsDropdown },
+    { label: "Skills", href: "/skills" },
     { label: "Qualification", href: "/qualification" },
     { label: "Documentary", href: "/documentary" },
     { label: "Projects", href: "#projects" },
@@ -41,7 +34,6 @@ export default function Navbar() {
 
   const closeMobileMenu = () => {
     setMobileMenuOpen(false);
-    setMobileSkillsOpen(false);
   };
 
   return (
@@ -74,46 +66,6 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
-
-            {/* Skills Dropdown */}
-            <div
-              className="relative"
-              onMouseEnter={() => setSkillsOpen(true)}
-              onMouseLeave={() => setSkillsOpen(false)}
-            >
-              <button className="flex items-center gap-1 text-sm font-medium tracking-wide text-[#1A1A1A] dark:text-[#E5E5E5] hover:text-[#555] dark:hover:text-white transition-colors duration-300">
-                Skills
-                <ChevronDown
-                  size={14}
-                  className={`transition-transform duration-200 ${
-                    skillsOpen ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
-              <AnimatePresence>
-                {skillsOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    transition={{ duration: 0.15 }}
-                    className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50"
-                  >
-                    <div className="bg-white dark:bg-[#2A2A2A] rounded-lg shadow-lg border border-[#E5E5E5] dark:border-[#333] py-2 px-1 min-w-[140px]">
-                      {skillsDropdown.map((item) => (
-                        <a
-                          key={item.label}
-                          href={item.href}
-                          className="block px-4 py-2 text-sm text-[#1A1A1A] dark:text-[#E5E5E5] hover:bg-[#F5F2ED] dark:hover:bg-[#333] rounded-md transition-colors"
-                        >
-                          {item.label}
-                        </a>
-                      ))}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
 
             {rightNavLinks.map((link) => (
               <Link
@@ -175,44 +127,7 @@ export default function Navbar() {
                 }}
                 className="flex flex-col items-center"
               >
-                {link.children ? (
-                  <>
-                    <button
-                      onClick={() => setMobileSkillsOpen((v) => !v)}
-                      className="flex items-center gap-1.5 text-2xl font-bold text-[#1A1A1A] dark:text-white hover:text-[#555] dark:hover:text-[#888] transition-colors"
-                    >
-                      {link.label}
-                      <ChevronDown
-                        size={18}
-                        className={`transition-transform duration-200 ${
-                          mobileSkillsOpen ? "rotate-180" : ""
-                        }`}
-                      />
-                    </button>
-                    <AnimatePresence initial={false}>
-                      {mobileSkillsOpen && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          exit={{ opacity: 0, height: 0 }}
-                          transition={{ duration: 0.2, ease: "easeOut" }}
-                          className="flex flex-col items-center gap-3 overflow-hidden mt-3"
-                        >
-                          {link.children.map((item) => (
-                            <a
-                              key={item.label}
-                              href={item.href}
-                              onClick={closeMobileMenu}
-                              className="text-base font-medium text-[#1A1A1A]/70 dark:text-white/70 hover:text-[#1A1A1A] dark:hover:text-white transition-colors"
-                            >
-                              {item.label}
-                            </a>
-                          ))}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </>
-                ) : link.href!.startsWith("#") ? (
+                {link.href.startsWith("#") ? (
                   <a
                     href={link.href}
                     onClick={closeMobileMenu}
@@ -222,10 +137,10 @@ export default function Navbar() {
                   </a>
                 ) : (
                   <Link
-                    to={link.href!}
+                    to={link.href}
                     onClick={closeMobileMenu}
                     className={`text-2xl font-bold transition-colors ${
-                      isActive(link.href!)
+                      isActive(link.href)
                         ? "text-[#1A1A1A] dark:text-white"
                         : "text-[#1A1A1A]/60 dark:text-white/60"
                     }`}

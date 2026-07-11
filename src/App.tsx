@@ -6,6 +6,7 @@ import HeroSection from "./components/HeroSection";
 import ResumePage from "./components/ResumePage";
 import QualificationPage from "./components/QualificationPage";
 import DocumentaryPage from "./components/DocumentaryPage";
+import SkillsPage from "./components/SkillsPage"; // <-- ADD THIS
 
 function HomePage() {
   return (
@@ -20,7 +21,9 @@ function AppContent() {
   const isResume = location.pathname === "/resume";
   const isQualification = location.pathname === "/qualification";
   const isDocumentary = location.pathname === "/documentary";
-  const hideBadge = isResume || isQualification || isDocumentary;
+  const isSkills = location.pathname === "/skills"; // <-- ADD THIS
+
+  const hideBadge = isResume || isQualification || isDocumentary || isSkills;
 
   return (
     <div className="relative min-h-screen bg-[#F5F2ED] dark:bg-[#1A1A1A] text-[#1A1A1A] dark:text-white font-sans selection:bg-[#1A1A1A] selection:text-white dark:selection:bg-white dark:selection:text-[#1A1A1A] transition-colors duration-300">
@@ -32,6 +35,7 @@ function AppContent() {
         <Route path="/resume" element={<ResumePage />} />
         <Route path="/qualification" element={<QualificationPage />} />
         <Route path="/documentary" element={<DocumentaryPage />} />
+        <Route path="/skills" element={<SkillsPage />} /> {/* <-- ADD THIS */}
       </Routes>
 
       {/* Floating name badge — hidden on resume/qualification/documentary pages for cleaner look */}

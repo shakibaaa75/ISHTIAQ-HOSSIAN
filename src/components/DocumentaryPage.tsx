@@ -1,200 +1,198 @@
-import { motion } from "framer-motion";
-import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
 import {
   FileText,
-  Download,
   Eye,
-  //   ZoomIn,
-  //   ZoomOut,
-  //   RotateCw,
+  X,
   BookOpen,
   Layers,
   GraduationCap,
+  CircuitBoard,
+  Cpu,
+  Droplets,
 } from "lucide-react";
 
-// ─── PDF VIEWER COMPONENT (reused from ResumePage) ───
-// function PDFViewer({ url, title }: { url: string; title: string }) {
-//   const [scale, setScale] = useState(1.0);
-//   const [rotate, setRotate] = useState(0);
-//   const [loading, setLoading] = useState(true);
+// ─── BOTTOM SHEET PDF VIEWER ───
+function PDFSheet({
+  url,
+  title,
+  isOpen,
+  onClose,
+}: {
+  url: string;
+  title: string;
+  isOpen: boolean;
+  onClose: () => void;
+}) {
+  const [loading, setLoading] = useState(true);
 
-//   return (
-//     <div className="relative w-full">
-//       {/* Toolbar */}
-//       <motion.div
-//         initial={{ opacity: 0, y: -10 }}
-//         animate={{ opacity: 1, y: 0 }}
-//         transition={{ delay: 0.3 }}
-//         className="flex items-center justify-between gap-2 px-2.5 sm:px-4 py-2.5 sm:py-3 bg-white/80 dark:bg-[#2A2A2A]/80 backdrop-blur-sm border border-[#E5E5E5] dark:border-[#333] rounded-t-2xl"
-//       >
-//         <div className="hidden sm:flex items-center gap-2 min-w-0">
-//           <FileText
-//             size={16}
-//             className="text-[#888] dark:text-[#666] shrink-0"
-//           />
-//           <span className="text-xs font-medium text-[#555] dark:text-[#999] truncate max-w-[110px] sm:max-w-xs">
-//             {title}
-//           </span>
-//         </div>
-//         <div className="flex items-center gap-0.5 sm:gap-1.5 ml-auto">
-//           <button
-//             onClick={() => setScale((s) => Math.max(0.5, s - 0.1))}
-//             className="p-1.5 rounded-lg hover:bg-[#F5F2ED] dark:hover:bg-[#333] transition-colors"
-//             title="Zoom out"
-//           >
-//             <ZoomOut size={14} className="text-[#555] dark:text-[#999]" />
-//           </button>
-//           <span className="text-[10px] sm:text-xs font-mono text-[#888] dark:text-[#666] w-9 sm:w-12 text-center">
-//             {Math.round(scale * 100)}%
-//           </span>
-//           <button
-//             onClick={() => setScale((s) => Math.min(2.0, s + 0.1))}
-//             className="p-1.5 rounded-lg hover:bg-[#F5F2ED] dark:hover:bg-[#333] transition-colors"
-//             title="Zoom in"
-//           >
-//             <ZoomIn size={14} className="text-[#555] dark:text-[#999]" />
-//           </button>
-//           <div className="w-px h-4 bg-[#E5E5E5] dark:bg-[#333] mx-0.5 sm:mx-1" />
-//           <button
-//             onClick={() => setRotate((r) => (r + 90) % 360)}
-//             className="p-1.5 rounded-lg hover:bg-[#F5F2ED] dark:hover:bg-[#333] transition-colors"
-//             title="Rotate"
-//           >
-//             <RotateCw size={14} className="text-[#555] dark:text-[#999]" />
-//           </button>
-//           <a
-//             href={url}
-//             download={title}
-//             className="p-1.5 rounded-lg hover:bg-[#F5F2ED] dark:hover:bg-[#333] transition-colors"
-//             title="Download"
-//           >
-//             <Download size={14} className="text-[#555] dark:text-[#999]" />
-//           </a>
-//           <a
-//             href={url}
-//             target="_blank"
-//             rel="noopener noreferrer"
-//             className="inline-flex p-1.5 rounded-lg hover:bg-[#F5F2ED] dark:hover:bg-[#333] transition-colors"
-//             title="Preview"
-//           >
-//             <Eye size={14} className="text-[#555] dark:text-[#999]" />
-//           </a>
-//         </div>
-//       </motion.div>
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    if (isOpen) {
+      setLoading(true);
+      document.body.style.overflow = "hidden";
+      window.addEventListener("keydown", handleKey);
+    }
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", handleKey);
+    };
+  }, [isOpen, onClose]);
 
-//       {/* PDF Canvas Area */}
-//       <div className="relative bg-[#E5E5E5] dark:bg-[#111] rounded-b-2xl overflow-hidden border-x border-b border-[#E5E5E5] dark:border-[#333]">
-//         {loading && (
-//           <div className="absolute inset-0 flex items-center justify-center z-10 bg-[#E5E5E5] dark:bg-[#111]">
-//             <motion.div
-//               animate={{ rotate: 360 }}
-//               transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-//               className="w-8 h-8 border-2 border-[#1A1A1A] dark:border-white border-t-transparent rounded-full"
-//             />
-//           </div>
-//         )}
-//         <div
-//           className="relative w-full overflow-hidden h-[50vh] sm:h-[65vh] lg:h-[75vh]"
-//           style={{ maxHeight: "1000px" }}
-//         >
-//           <iframe
-//             src={`${url}#toolbar=0&navpanes=0`}
-//             className="absolute inset-0 w-full h-full shadow-2xl"
-//             style={{
-//               border: "none",
-//               background: "white",
-//               transform: `rotate(${rotate}deg) scale(${scale})`,
-//               transformOrigin: "center center",
-//               transition: "transform 0.2s ease",
-//             }}
-//             onLoad={() => setLoading(false)}
-//             title={title}
-//           />
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25 }}
+          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-6"
+          style={{ touchAction: "none" }}
+        >
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={onClose}
+          />
 
-// ─── PDF CARD (compact grid view) ───
+          {/* Panel — full height, no header bar, PDF fills everything */}
+          <motion.div
+            initial={{ opacity: 0, y: 40, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 40, scale: 0.98 }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className="relative w-full h-full sm:h-[90vh] sm:max-w-4xl
+                       bg-white/70 dark:bg-[#1A1A1A]/70 backdrop-blur-xl
+                       border border-white/40 dark:border-white/10
+                       rounded-t-3xl sm:rounded-3xl shadow-2xl
+                       overflow-hidden"
+          >
+            {loading && (
+              <div className="absolute inset-0 flex items-center justify-center z-10 bg-white/40 dark:bg-black/40 backdrop-blur-md">
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                  className="w-8 h-8 border-2 border-[#1A1A1A] dark:border-white border-t-transparent rounded-full"
+                />
+              </div>
+            )}
+
+            <iframe
+              key={url}
+              src={`${url}#toolbar=1&navpanes=0&view=FitH`}
+              className="w-full h-full"
+              style={{ border: "none" }}
+              onLoad={() => setLoading(false)}
+              title={title}
+            />
+
+            {/* Floating close button — overlays the PDF, doesn't take its own bar */}
+            <button
+              onClick={onClose}
+              className="absolute top-3 right-3 z-20 w-9 h-9 rounded-full
+                         bg-white/70 dark:bg-black/50 backdrop-blur-md
+                         border border-white/40 dark:border-white/10
+                         flex items-center justify-center shadow-md
+                         hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors group"
+              title="Close"
+            >
+              <X
+                size={16}
+                className="text-[#555] dark:text-[#999] group-hover:text-red-500 transition-colors"
+              />
+            </button>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
+// ─── PDF CARD (clickable, opens bottom sheet) ───
 function PDFCard({
   url,
   title,
   description,
   index,
+  icon: Icon = FileText,
+  tag = "PDF Document",
 }: {
   url: string;
   title: string;
   description: string;
   index: number;
+  icon?: React.ElementType;
+  tag?: string;
 }) {
   const [hovered, setHovered] = useState(false);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className="bg-white dark:bg-[#2A2A2A] rounded-2xl border border-[#E5E5E5] dark:border-[#333] overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 group"
-    >
-      {/* PDF Preview Thumbnail */}
-      <div className="relative h-48 sm:h-56 bg-[#E5E5E5] dark:bg-[#111] overflow-hidden">
-        <iframe
-          src={`${url}#toolbar=0&navpanes=0&page=1&zoom=page-fit`}
-          className="w-full h-full pointer-events-none"
-          style={{ border: "none" }}
-          title={title}
-        />
-        {/* Hover overlay */}
-        <div
-          className={`absolute inset-0 bg-[#1A1A1A]/60 dark:bg-black/60 flex items-center justify-center gap-3 transition-opacity duration-300 ${
-            hovered ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          <a
-            href={url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-colors"
-            title="Preview"
+    <>
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: index * 0.1 }}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        onClick={() => setIsSheetOpen(true)}
+        className="bg-white dark:bg-[#2A2A2A] rounded-2xl border border-[#E5E5E5] dark:border-[#333] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group cursor-pointer"
+      >
+        {/* Thumbnail */}
+        <div className="relative h-48 sm:h-56 bg-[#E5E5E5] dark:bg-[#111] overflow-hidden">
+          <iframe
+            src={`${url}#toolbar=0&navpanes=0&page=1&zoom=page-fit`}
+            className="w-full h-full pointer-events-none"
+            style={{ border: "none" }}
+            title={title}
+          />
+          <div
+            className={`absolute inset-0 bg-[#1A1A1A]/60 dark:bg-black/60 flex items-center justify-center transition-opacity duration-300 ${
+              hovered ? "opacity-100" : "opacity-0"
+            }`}
           >
-            <Eye size={18} className="text-white" />
-          </a>
-          <a
-            href={url}
-            download={title}
-            className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-colors"
-            title="Download"
-          >
-            <Download size={18} className="text-white" />
-          </a>
+            <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-colors">
+              <Eye size={20} className="text-white" />
+            </div>
+          </div>
         </div>
-      </div>
 
-      {/* Card Info */}
-      <div className="p-4 sm:p-5">
-        <div className="flex items-center gap-2 mb-2">
-          <FileText size={14} className="text-[#888] dark:text-[#666]" />
-          <span className="text-[10px] font-semibold uppercase tracking-wider text-[#888] dark:text-[#666]">
-            PDF Document
-          </span>
+        {/* Info */}
+        <div className="p-4 sm:p-5">
+          <div className="flex items-center gap-2 mb-2">
+            <Icon size={14} className="text-[#888] dark:text-[#666]" />
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-[#888] dark:text-[#666]">
+              {tag}
+            </span>
+          </div>
+          <h3 className="text-sm font-bold text-[#1A1A1A] dark:text-white mb-1 truncate">
+            {title}
+          </h3>
+          <p className="text-xs text-[#888] dark:text-[#666] leading-relaxed line-clamp-2">
+            {description}
+          </p>
         </div>
-        <h3 className="text-sm font-bold text-[#1A1A1A] dark:text-white mb-1 truncate">
-          {title}
-        </h3>
-        <p className="text-xs text-[#888] dark:text-[#666] leading-relaxed line-clamp-2">
-          {description}
-        </p>
-      </div>
-    </motion.div>
+      </motion.div>
+
+      <PDFSheet
+        url={url}
+        title={title}
+        isOpen={isSheetOpen}
+        onClose={() => setIsSheetOpen(false)}
+      />
+    </>
   );
 }
 
 // ─── SECTION HEADER ───
 function SectionHeader({
-  //   icon: Icon,
+  icon: Icon,
   label,
   title,
   delay = 0,
@@ -241,7 +239,7 @@ function SectionHeader({
   );
 }
 
-// ─── HERO POSTER SECTION ───
+// ─── HERO POSTER ───
 function HeroPoster() {
   return (
     <motion.div
@@ -251,20 +249,17 @@ function HeroPoster() {
       className="relative bg-white dark:bg-[#2A2A2A] rounded-3xl border border-[#E5E5E5] dark:border-[#333] overflow-hidden shadow-lg mb-12"
     >
       <div className="relative aspect-[16/9] sm:aspect-[21/9] overflow-hidden">
-        {/* Poster Image */}
         <img
           src="/image/documentary-poster.png"
           alt="Documentary Poster"
           className="w-full h-full object-cover"
           onError={(e) => {
-            // Fallback if image doesn't exist
             const target = e.target as HTMLImageElement;
             target.style.display = "none";
             const fallback = target.nextElementSibling as HTMLElement;
             if (fallback) fallback.style.display = "flex";
           }}
         />
-        {/* Fallback placeholder */}
         <div className="absolute inset-0 hidden flex-col items-center justify-center bg-gradient-to-br from-[#1A1A1A] to-[#333] dark:from-[#2A2A2A] dark:to-[#111]">
           <BookOpen size={48} className="text-white/30 mb-4" />
           <h2 className="text-2xl sm:text-3xl font-black text-white/60 tracking-tight">
@@ -274,11 +269,7 @@ function HeroPoster() {
             Academic & Project Documentation
           </p>
         </div>
-
-        {/* Overlay gradient */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A]/80 via-transparent to-transparent" />
-
-        {/* Poster text overlay */}
         <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 md:p-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -308,9 +299,8 @@ function HeroPoster() {
   );
 }
 
-// ─── MAIN DOCUMENTARY PAGE ───
+// ─── MAIN PAGE ───
 export default function DocumentaryPage() {
-  // Section 1: Academic Reports (4 PDFs)
   const academicPdfs = [
     {
       url: "/docs/report-1.pdf",
@@ -338,7 +328,25 @@ export default function DocumentaryPage() {
     },
   ];
 
-  // Section 2: Project Documentation (2 PDFs)
+  const hardwarePdfs = [
+    {
+      url: "/docs/",
+      title: "Digital Code Lock System",
+      description:
+        "Secure 5-digit code lock using CD4017 decade counters, 555 timer IC, and logic gates for sequential password-based access control.",
+      icon: Cpu,
+      tag: "Hardware Project",
+    },
+    {
+      url: "/docs/Water-Tank-Water-Level-Indicator (2).pptx.pdf",
+      title: "Water Tank Water Level Indicator",
+      description:
+        "Water level monitoring using BC547 transistors and LED indicators to prevent overflow and conserve energy in residential applications.",
+      icon: Droplets,
+      tag: "Hardware Project",
+    },
+  ];
+
   const projectPdfs = [
     {
       url: "/docs/project-1.pdf",
@@ -398,10 +406,9 @@ export default function DocumentaryPage() {
         <circle cx="40" cy="40" r="3" fill="currentColor" />
       </motion.svg>
 
-      {/* ═══════ HERO POSTER ═══════ */}
       <HeroPoster />
 
-      {/* ═══════ SECTION 1: ACADEMIC REPORTS (4 PDFs) ═══════ */}
+      {/* ═══════ ACADEMIC REPORTS ═══════ */}
       <div className="mb-16">
         <SectionHeader
           icon={GraduationCap}
@@ -409,7 +416,6 @@ export default function DocumentaryPage() {
           title="Academic Reports"
           delay={0.2}
         />
-
         <motion.p
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
@@ -420,8 +426,6 @@ export default function DocumentaryPage() {
           coursework at AIUB. Each report covers theoretical analysis,
           simulation results, and practical implementation of core EEE concepts.
         </motion.p>
-
-        {/* 4 PDF Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {academicPdfs.map((pdf, i) => (
             <PDFCard
@@ -435,27 +439,57 @@ export default function DocumentaryPage() {
         </div>
       </div>
 
-      {/* ═══════ SECTION 2: PROJECT DOCUMENTATION (2 PDFs) ═══════ */}
+      {/* ═══════ HARDWARE PROJECTS (YOUR NEW ONES) ═══════ */}
       <div className="mb-16">
         <SectionHeader
-          icon={Layers}
-          label="Portfolio / Projects"
-          title="Project Documentation"
+          icon={CircuitBoard}
+          label="Portfolio / Hardware"
+          title="Hardware Projects"
           delay={0.4}
         />
-
         <motion.p
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.5 }}
           className="text-[#555] dark:text-[#999] text-sm md:text-base leading-relaxed max-w-2xl mb-8"
         >
+          Hands-on circuit design and hardware implementation projects built
+          using discrete components, ICs, and breadboard prototyping. These
+          projects demonstrate practical digital and analog electronics skills.
+        </motion.p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-3xl">
+          {hardwarePdfs.map((pdf, i) => (
+            <PDFCard
+              key={pdf.title}
+              url={pdf.url}
+              title={pdf.title}
+              description={pdf.description}
+              index={i + 4}
+              icon={pdf.icon}
+              tag={pdf.tag}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* ═══════ PROJECT DOCUMENTATION ═══════ */}
+      <div className="mb-16">
+        <SectionHeader
+          icon={Layers}
+          label="Portfolio / Projects"
+          title="Project Documentation"
+          delay={0.6}
+        />
+        <motion.p
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.7 }}
+          className="text-[#555] dark:text-[#999] text-sm md:text-base leading-relaxed max-w-2xl mb-8"
+        >
           Comprehensive project reports documenting the design process,
           implementation challenges, and outcomes of hands-on engineering
           projects built during my academic journey.
         </motion.p>
-
-        {/* 2 PDF Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-3xl">
           {projectPdfs.map((pdf, i) => (
             <PDFCard
@@ -463,13 +497,13 @@ export default function DocumentaryPage() {
               url={pdf.url}
               title={pdf.title}
               description={pdf.description}
-              index={i + 4}
+              index={i + 6}
             />
           ))}
         </div>
       </div>
 
-      {/* Bottom circuit accent */}
+      {/* Bottom accent */}
       <motion.svg
         initial={{ opacity: 0 }}
         animate={{ opacity: 0.1 }}
